@@ -1,3 +1,4 @@
+var burgerCount = 0; 
 class Platformer extends Phaser.Scene {
     constructor() {
         super("platformerScene");
@@ -11,6 +12,7 @@ class Platformer extends Phaser.Scene {
         this.JUMP_VELOCITY = -600;
         this.PARTICLE_VELOCITY = 50;
         this.SCALE = 3.0;
+        burgerCount = 0; 
     }
 
     preload(){
@@ -20,10 +22,13 @@ class Platformer extends Phaser.Scene {
         this.load.audio("winner", "jingles_STEEL15.ogg");
         this.load.audio("jump", "phaseJump1.ogg");
         this.load.audio("hit", "zapThreeToneDown.ogg");
+        this.load.image("burgerIcon", "tile_0090.png");
 
     }
 
     create() {
+        this.burgerCount = 0; 
+
         this.cameras.main.setBackgroundColor('#ff9cd9');
         // Create a new tilemap game object which uses 18x18 pixel tiles, and is
         // 45 tiles wide and 25 tiles tall.
@@ -82,6 +87,9 @@ class Platformer extends Phaser.Scene {
         my.sprite.player = this.physics.add.sprite(30, 250, "platformer_characters", "tile_0000.png");
         my.sprite.player.setCollideWorldBounds(true);
 
+        my.sprite.burgerIcon = this.add.sprite(10,200, "burgerIcon");
+        my.sprite.burgerIcon.setScrollFactor(0, 0);
+
         // Enable collision handling
         this.physics.add.collider(my.sprite.player, this.groundLayer);
 
@@ -92,6 +100,8 @@ class Platformer extends Phaser.Scene {
             this.sound.play("getCoin", {
                 volume: 1 
             });
+            burgerCount++;
+            console.log(burgerCount);
         });
 
         this.physics.add.overlap(my.sprite.player, this.spikeGroup, (obj1, obj2) => {
@@ -103,11 +113,14 @@ class Platformer extends Phaser.Scene {
         });
 
         this.physics.add.overlap(my.sprite.player, this.candleGroup, (obj1, obj2) => {
-            obj2.destroy(); // remove coin on overlap
-            this.sound.play("winner", {
-                volume: 1 
-            });
-            this.scene.start("win");
+            //if(burgerCount == 28){
+                obj2.destroy(); // remove candle on overlap
+                this.sound.play("winner", {
+                    volume: 1 
+                });
+                this.scene.start("win");
+            //}
+            
         });
 
         // set up Phaser-provided cursor key input

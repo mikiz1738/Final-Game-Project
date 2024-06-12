@@ -19,7 +19,7 @@ class Win extends Phaser.Scene {
         var textBoundsX = gameOverText.getBounds();
         gameOverText.x -= textBoundsX.width/2;
 
-        var restartText = this.add.text(this.game.canvas.width/2, this.game.canvas.height/2 - 100, "Press o to restart", {
+        var restartText = this.add.text(this.game.canvas.width/2, this.game.canvas.height/2 - 100, "Press o to play again", {
             fontFamily: 'Times, serif',
             fontSize: 20,
         });
@@ -34,6 +34,14 @@ class Win extends Phaser.Scene {
 
         textBoundsX = endText.getBounds();
         endText.x -= textBoundsX.width/2;
+
+        var creditText = this.add.text(this.game.canvas.width/2, this.game.canvas.height/2, "Created by: Michael Wong for CMPM 120", {
+            fontFamily: 'Times, serif',
+            fontSize: 20,
+        });
+
+        textBoundsX = creditText.getBounds();
+        creditText.x -= textBoundsX.width/2;
     
     }
 
