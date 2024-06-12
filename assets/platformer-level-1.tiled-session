@@ -8,7 +8,7 @@
             "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 1113.5,
+                "x": 1112.5,
                 "y": 180.5
             }
         },
@@ -22,7 +22,7 @@
             "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 403.66666666666663,
+                "x": 403,
                 "y": 116.33333333333334
             }
         },
@@ -30,7 +30,7 @@
             "scaleInDock": 1
         }
     },
-    "frame.defaultDuration": 80,
+    "frame.defaultDuration": 300,
     "last.exportedFilePath": "C:/Users/Michael/Desktop/CMPM 120/Final-Game-Project/assets",
     "map.lastUsedExportFilter": "All Files (*)",
     "openFiles": [
