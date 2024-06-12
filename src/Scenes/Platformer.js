@@ -23,6 +23,7 @@ class Platformer extends Phaser.Scene {
     }
 
     create() {
+        this.cameras.main.setBackgroundColor('#ff9cd9');
         // Create a new tilemap game object which uses 18x18 pixel tiles, and is
         // 45 tiles wide and 25 tiles tall.
         this.map = this.add.tilemap("platformer-level-1", 18, 18, 45, 20);
@@ -105,6 +106,7 @@ class Platformer extends Phaser.Scene {
             this.sound.play("hit", {
                 volume: 1 
             });
+            this.scene.start("win");
         });
 
         // set up Phaser-provided cursor key input

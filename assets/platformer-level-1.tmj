@@ -643,6 +643,18 @@
                  "width":18,
                  "x":2088,
                  "y":180
+                }, 
+                {
+                 "gid":82,
+                 "height":18,
+                 "id":92,
+                 "name":"candle",
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":18,
+                 "x":54,
+                 "y":234
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -682,7 +694,7 @@
          "y":0
         }],
  "nextlayerid":7,
- "nextobjectid":92,
+ "nextobjectid":93,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.10.2",
