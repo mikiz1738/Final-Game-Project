@@ -21,10 +21,10 @@
         },
         "platformer-level-1.tmj": {
             "scale": 1.5,
-            "selectedLayer": 1,
+            "selectedLayer": 0,
             "viewCenter": {
-                "x": 390.3333333333333,
-                "y": 105
+                "x": 378.3333333333333,
+                "y": 247
             }
         },
         "platformer-level-1.tmj#pink_background": {

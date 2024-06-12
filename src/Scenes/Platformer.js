@@ -17,6 +17,7 @@ class Platformer extends Phaser.Scene {
         this.load.scenePlugin('AnimatedTiles', './lib/AnimatedTiles.js', 'animatedTiles', 'animatedTiles');
         this.load.setPath("./assets/");
         this.load.audio("getCoin", "jingles_STEEL16.ogg");
+        this.load.audio("winner", "jingles_STEEL15.ogg");
         this.load.audio("jump", "phaseJump1.ogg");
         this.load.audio("hit", "zapThreeToneDown.ogg");
 
@@ -103,7 +104,7 @@ class Platformer extends Phaser.Scene {
 
         this.physics.add.overlap(my.sprite.player, this.candleGroup, (obj1, obj2) => {
             obj2.destroy(); // remove coin on overlap
-            this.sound.play("hit", {
+            this.sound.play("winner", {
                 volume: 1 
             });
             this.scene.start("win");

@@ -11,33 +11,29 @@ class Win extends Phaser.Scene {
     create() {
         this.cameras.main.setBackgroundColor('#ff9cd9');
         this.nextScene = this.input.keyboard.addKey("O");
-        var gameOverText = this.add.text(this.game.canvas.width/2, this.game.canvas.height/2 - 100, "You Win!", {
+        var gameOverText = this.add.text(this.game.canvas.width/2, this.game.canvas.height/2 - 200, "You Win!", {
             fontFamily: 'Times, serif',
             fontSize: 80,
         });
 
-        var textBounds = gameOverText.getBounds();
+        var textBoundsX = gameOverText.getBounds();
+        gameOverText.x -= textBoundsX.width/2;
 
-        gameOverText.x -= textBounds.width/2;
-
-        var restartText = this.add.text(this.game.canvas.width/2, this.game.canvas.height/2, "Press o to restart", {
+        var restartText = this.add.text(this.game.canvas.width/2, this.game.canvas.height/2 - 100, "Press o to restart", {
             fontFamily: 'Times, serif',
             fontSize: 20,
         });
 
-        textBounds = restartText.getBounds();
-        restartText.x -= textBounds.width/2;
-        // if(win == true){
-        //     var winText = this.add.text(this.game.canvas.width/2, this.game.canvas.height/2 - 200, "You Win!", {
-        //         fontFamily: 'Times, serif',
-        //         fontSize: 80,
-            
-        //     });
-        //     textBounds = winText.getBounds();
-        
-        //     winText.x -= textBounds.width/2;
-        // }
+        textBoundsX = restartText.getBounds();
+        restartText.x -= textBoundsX.width/2;
 
+        var endText = this.add.text(this.game.canvas.width/2, this.game.canvas.height/2 - 50, "Excellent! You successfully gathered all the burgers to feed the colony!", {
+            fontFamily: 'Times, serif',
+            fontSize: 20,
+        });
+
+        textBoundsX = endText.getBounds();
+        endText.x -= textBoundsX.width/2;
     
     }
 
