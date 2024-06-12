@@ -10,22 +10,29 @@ class Platformer extends Phaser.Scene {
         this.physics.world.gravity.y = 1500;
         this.JUMP_VELOCITY = -600;
         this.PARTICLE_VELOCITY = 50;
-        this.SCALE = 2.0;
+        this.SCALE = 3.0;
     }
 
     preload(){
         this.load.scenePlugin('AnimatedTiles', './lib/AnimatedTiles.js', 'animatedTiles', 'animatedTiles');
+        this.load.setPath("./assets/");
+        this.load.audio("getCoin", "jingles_STEEL16.ogg");
+        this.load.audio("jump", "phaseJump1.ogg");
+        this.load.audio("hit", "zapThreeToneDown.ogg");
+
     }
 
     create() {
         // Create a new tilemap game object which uses 18x18 pixel tiles, and is
         // 45 tiles wide and 25 tiles tall.
-        this.map = this.add.tilemap("platformer-level-1", 18, 18, 45, 25);
+        this.map = this.add.tilemap("platformer-level-1", 18, 18, 45, 20);
 
         // Add a tileset to the map
         // First parameter: name we gave the tileset in Tiled
         // Second parameter: key for the tilesheet (from this.load.image in Load.js)
         this.tileset = this.map.addTilesetImage("tilemap_packed", "tilemap_tiles");
+
+        this.backgroundLayer = this.map.createLayer("Background", this.tileset, 0, 0);
 
         // Create a layer
         this.groundLayer = this.map.createLayer("Ground-n-Platforms", this.tileset, 0, 0);
@@ -45,14 +52,32 @@ class Platformer extends Phaser.Scene {
             frame: 90
         });
 
+        // Add createFromObjects here
+        this.spikes = this.map.createFromObjects("Hazards", {
+            name: "spike",
+            key: "tilemap_sheet",
+            frame: 105
+        });
+
+        this.candles = this.map.createFromObjects("Win Condition", {
+            name: "candle",
+            key: "tilemap_sheet",
+            frame: 81
+        });
+
 
         // TODO: Add turn into Arcade Physics here
         this.physics.world.enable(this.burgers, Phaser.Physics.Arcade.STATIC_BODY);
-
         this.burgerGroup = this.add.group(this.burgers);
 
+        this.physics.world.enable(this.spikes, Phaser.Physics.Arcade.STATIC_BODY);
+        this.spikeGroup = this.add.group(this.spikes);
+
+        this.physics.world.enable(this.candles, Phaser.Physics.Arcade.STATIC_BODY);
+        this.candleGroup = this.add.group(this.candles);
+
         // set up player avatar
-        my.sprite.player = this.physics.add.sprite(30, 0, "platformer_characters", "tile_0000.png");
+        my.sprite.player = this.physics.add.sprite(30, 250, "platformer_characters", "tile_0000.png");
         my.sprite.player.setCollideWorldBounds(true);
 
         // Enable collision handling
@@ -62,6 +87,24 @@ class Platformer extends Phaser.Scene {
         // Handle collision detection with coins
         this.physics.add.overlap(my.sprite.player, this.burgerGroup, (obj1, obj2) => {
             obj2.destroy(); // remove coin on overlap
+            this.sound.play("getCoin", {
+                volume: 1 
+            });
+        });
+
+        this.physics.add.overlap(my.sprite.player, this.spikeGroup, (obj1, obj2) => {
+            obj2.destroy(); // remove coin on overlap
+            this.sound.play("hit", {
+                volume: 1 
+            });
+            this.scene.restart();
+        });
+
+        this.physics.add.overlap(my.sprite.player, this.candleGroup, (obj1, obj2) => {
+            obj2.destroy(); // remove coin on overlap
+            this.sound.play("hit", {
+                volume: 1 
+            });
         });
 
         // set up Phaser-provided cursor key input
@@ -69,6 +112,8 @@ class Platformer extends Phaser.Scene {
 
         this.rKey = this.input.keyboard.addKey('R');
 
+        this.physics.world.drawDebug = this.physics.world.drawDebug ? false : true
+        this.physics.world.debugGraphic.clear()
         // debug key listener (assigned to D key)
         this.input.keyboard.on('keydown-D', () => {
             this.physics.world.drawDebug = this.physics.world.drawDebug ? false : true
@@ -91,7 +136,7 @@ class Platformer extends Phaser.Scene {
 
         //camera code
         this.cameras.main.setBounds(0, 0, this.map.widthInPixels, this.map.heightInPixels);
-        this.cameras.main.startFollow(my.sprite.player, true, 0.25, 0.25); // (target, [,roundPixels][,lerpX][,lerpY])
+        this.cameras.main.startFollow(my.sprite.player, true, 0.1, 0.009); // (target, [,roundPixels][,lerpX][,lerpY])
         this.cameras.main.setDeadzone(50, 50);
         this.cameras.main.setZoom(this.SCALE);
 
@@ -106,6 +151,7 @@ class Platformer extends Phaser.Scene {
             my.vfx.walking.startFollow(my.sprite.player, my.sprite.player.displayWidth/2-10, my.sprite.player.displayHeight/2-5, false);
 
             my.vfx.walking.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
+
 
             // Only play smoke effect if touching the ground
 
@@ -122,6 +168,7 @@ class Platformer extends Phaser.Scene {
             my.vfx.walking.startFollow(my.sprite.player, my.sprite.player.displayWidth/2-10, my.sprite.player.displayHeight/2-5, false);
 
             my.vfx.walking.setParticleSpeed(this.PARTICLE_VELOCITY, 0);
+
 
             // Only play smoke effect if touching the ground
 
@@ -147,8 +194,16 @@ class Platformer extends Phaser.Scene {
         }
         if(my.sprite.player.body.blocked.down && Phaser.Input.Keyboard.JustDown(cursors.up)) {
             my.sprite.player.body.setVelocityY(this.JUMP_VELOCITY);
+            this.sound.play("jump", {
+                volume: 1 
+            });
         }
-
+        if(my.sprite.player.y >= 400){
+            this.sound.play("hit", {
+                volume: 1 
+            });
+            this.scene.restart();
+        }
         if(Phaser.Input.Keyboard.JustDown(this.rKey)) {
             this.scene.restart();
         }
