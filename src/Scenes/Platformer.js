@@ -7,7 +7,7 @@ class Platformer extends Phaser.Scene {
     init() {
         // variables and settings
         this.ACCELERATION = 400;
-        this.DRAG = 500;    // DRAG < ACCELERATION = icy slide
+        this.DRAG = 500;    
         this.physics.world.gravity.y = 1500;
         this.JUMP_VELOCITY = -600;
         this.PARTICLE_VELOCITY = 50;
@@ -16,6 +16,7 @@ class Platformer extends Phaser.Scene {
     }
 
     preload(){
+        //load sprites
         this.load.scenePlugin('AnimatedTiles', './lib/AnimatedTiles.js', 'animatedTiles', 'animatedTiles');
         this.load.setPath("./assets/");
         this.load.audio("getCoin", "jingles_STEEL16.ogg");
@@ -27,9 +28,9 @@ class Platformer extends Phaser.Scene {
     }
 
     create() {
+        //reset number of burgers collected 
         this.burgerCount = 0; 
 
-        this.cameras.main.setBackgroundColor('#ff9cd9');
         // Create a new tilemap game object which uses 18x18 pixel tiles, and is
         // 45 tiles wide and 25 tiles tall.
         this.map = this.add.tilemap("platformer-level-1", 18, 18, 45, 20);
@@ -52,20 +53,21 @@ class Platformer extends Phaser.Scene {
         this.animatedTiles.init(this.map);
 
 
-        // Add createFromObjects here
+        // Add burgers createFromObjects here
         this.burgers = this.map.createFromObjects("Collectables", {
             name: "burger",
             key: "tilemap_sheet",
             frame: 90
         });
 
-        // Add createFromObjects here
+        // Add spikes createFromObjects here
         this.spikes = this.map.createFromObjects("Hazards", {
             name: "spike",
             key: "tilemap_sheet",
             frame: 105
         });
 
+        // Add candles createFromObjects here 
         this.candles = this.map.createFromObjects("Win Condition", {
             name: "candle",
             key: "tilemap_sheet",
@@ -73,7 +75,7 @@ class Platformer extends Phaser.Scene {
         });
 
 
-        // TODO: Add turn into Arcade Physics here
+        // Arcade Physics 
         this.physics.world.enable(this.burgers, Phaser.Physics.Arcade.STATIC_BODY);
         this.burgerGroup = this.add.group(this.burgers);
 
@@ -93,10 +95,9 @@ class Platformer extends Phaser.Scene {
         // Enable collision handling
         this.physics.add.collider(my.sprite.player, this.groundLayer);
 
-        // TODO: Add coin collision handler
-        // Handle collision detection with coins
+        // Handle collision detection with burger
         this.physics.add.overlap(my.sprite.player, this.burgerGroup, (obj1, obj2) => {
-            obj2.destroy(); // remove coin on overlap
+            obj2.destroy(); // remove burger on overlap
             this.sound.play("getCoin", {
                 volume: 1 
             });
@@ -104,6 +105,7 @@ class Platformer extends Phaser.Scene {
             console.log(burgerCount);
         });
 
+        // Handle collision detection with spikes
         this.physics.add.overlap(my.sprite.player, this.spikeGroup, (obj1, obj2) => {
             obj2.destroy(); // remove coin on overlap
             this.sound.play("hit", {
@@ -112,15 +114,15 @@ class Platformer extends Phaser.Scene {
             this.scene.restart();
         });
 
+        // Handle collision detection with candles
         this.physics.add.overlap(my.sprite.player, this.candleGroup, (obj1, obj2) => {
-            //if(burgerCount == 28){
+            if(burgerCount == 28){
                 obj2.destroy(); // remove candle on overlap
                 this.sound.play("winner", {
                     volume: 1 
                 });
                 this.scene.start("win");
-            //}
-            
+            }
         });
 
         // set up Phaser-provided cursor key input

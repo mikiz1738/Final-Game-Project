@@ -1,12 +1,4 @@
 { "compressionlevel":-1,
- "editorsettings":
-    {
-     "export":
-        {
-         "format":"tmx",
-         "target":"platformer-level-1.tmx"
-        }
-    },
  "height":20,
  "infinite":false,
  "layers":[
@@ -643,18 +635,6 @@
                  "width":18,
                  "x":2088,
                  "y":180
-                }, 
-                {
-                 "gid":82,
-                 "height":18,
-                 "id":92,
-                 "name":"candle",
-                 "rotation":0,
-                 "type":"",
-                 "visible":true,
-                 "width":18,
-                 "x":54,
-                 "y":234
                 }],
          "opacity":1,
          "type":"objectgroup",
